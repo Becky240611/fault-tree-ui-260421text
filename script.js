@@ -273,40 +273,63 @@ if (exportBtn) {
     });
 }
 
-// 管理權限組合鍵切換為：連點標題 5 次
+// 管理權限組合鍵切換為：連點標題 5 次 (彈出自定義視窗)
 const adminTrigger = document.getElementById('admin-trigger');
+const adminLoginModal = document.getElementById('admin-login-modal');
+const adminLoginOverlay = document.getElementById('admin-login-overlay');
+const adminPwdInput = document.getElementById('admin-pwd-input');
+const verifyAdminBtn = document.getElementById('verify-admin-btn');
+const closeAdminLoginBtn = document.getElementById('close-admin-login-btn');
+
 let clickCount = 0;
 let clickTimer = null;
 
-if (adminTrigger) {
+if (adminTrigger && adminLoginModal && adminLoginOverlay) {
     adminTrigger.addEventListener('click', () => {
         clickCount++;
-        
         if (clickTimer) clearTimeout(clickTimer);
-        
-        clickTimer = setTimeout(() => {
-            clickCount = 0;
-        }, 1000); // 1 秒內沒連點就歸零
+        clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
 
         if (clickCount >= 5) {
             clickCount = 0;
             const controls = document.getElementById('admin-controls');
-            
-            // 如果已經開啟，就切換隱藏
+            // 如果管理面板已經開啟，則縮回
             if (controls && controls.style.display === 'block') {
                 controls.style.display = 'none';
                 return;
             }
-            
-            const pwd = prompt("請輸入管理口令：");
-            if (pwd === getAdminPassword()) {
-                if (controls) {
-                    controls.style.display = 'block';
-                }
-            } else if (pwd !== null) {
-                alert("口令錯誤。");
-            }
+            // 否則開啟登入彈窗
+            adminLoginModal.style.display = 'block';
+            adminLoginOverlay.style.display = 'block';
+            adminPwdInput.value = '';
+            adminPwdInput.focus();
         }
+    });
+
+    const closeLogin = () => {
+        adminLoginModal.style.display = 'none';
+        adminLoginOverlay.style.display = 'none';
+    };
+
+    closeAdminLoginBtn.addEventListener('click', closeLogin);
+    adminLoginOverlay.addEventListener('click', closeLogin);
+
+    verifyAdminBtn.addEventListener('click', () => {
+        const pwd = adminPwdInput.value;
+        if (pwd === getAdminPassword()) {
+            const controls = document.getElementById('admin-controls');
+            if (controls) controls.style.display = 'block';
+            closeLogin();
+        } else {
+            alert("口令錯誤。");
+            adminPwdInput.value = '';
+            adminPwdInput.focus();
+        }
+    });
+
+    // 支援 Enter 鍵登入
+    adminPwdInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') verifyAdminBtn.click();
     });
 }
 

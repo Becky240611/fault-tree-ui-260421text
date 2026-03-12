@@ -136,6 +136,20 @@
         </div>
     </div>
 
+    <!-- Admin Password Modal (Custom Popup) -->
+    <div class="sop-overlay" id="admin-login-overlay" style="display: none; z-index: 3000;"></div>
+    <div id="admin-login-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: var(--bg-gradient); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; z-index: 3001; padding: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); text-align: center;">
+        <h3 style="margin-bottom: 16px; font-size: 1.25rem;">🔐 管理員身分驗證</h3>
+        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 20px; line-height: 1.6;">
+            若您是外勤同仁，請點擊 **關閉** 並繼續您的日常排查操作。
+        </p>
+        <input type="password" id="admin-pwd-input" placeholder="請輸入管理口令" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 1.1rem; outline: none;">
+        <div style="display: flex; gap: 12px; justify-content: stretch;">
+            <button id="close-admin-login-btn" class="btn-secondary" style="flex: 1; padding: 12px;">關閉</button>
+            <button id="verify-admin-btn" class="primary-option" style="flex: 1; padding: 12px; margin-top: 0 !important;">確認登入</button>
+        </div>
+    </div>
+
     <!-- Onboarding Tip -->
     <div id="onboarding-tip" class="onboarding-tip" style="display: none;">
         👋 歡迎！請根據機台的異常狀況，<strong>依序點選</strong>選項即可完成排查。<br>
