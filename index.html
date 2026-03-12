@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流程圖引導工具</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1 style="display: flex; justify-content: center; align-items: center; gap: 16px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" style="flex-shrink: 0;">
+                    <path fill="#a78bfa" d="m13.78 15.3l6 6l2.11-2.16l-6-6zm3.72-5.2c-.39 0-.81-.05-1.14-.19L4.97 21.25l-2.11-2.11l7.41-7.4L8.5 9.96l-.72.7l-1.45-1.41v2.86l-.7.7l-3.52-3.56l.7-.7h2.81l-1.4-1.41l3.56-3.56a2.976 2.976 0 0 1 4.22 0L9.89 5.74l1.41 1.4l-.71.71l1.79 1.78l1.82-1.88c-.14-.33-.2-.75-.2-1.12a3.49 3.49 0 0 1 3.5-3.52c.59 0 1.11.14 1.58.42L16.41 6.2l1.5 1.5l2.67-2.67c.28.47.42.97.42 1.6c0 1.92-1.55 3.47-3.5 3.47"/>
+                </svg>
+                智能維修助手
+            </h1>
+            <p>無腦照做，輕鬆除錯</p>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="🔍 搜尋關鍵字...">
+                <div id="search-results" class="search-results" style="display: none;"></div>
+            </div>
+            <div id="admin-controls" style="margin-top: 10px; display: none;">
+                <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; padding: 16px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span style="font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 600;">⚙️ 管理面板</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button id="toggle-admin-guide" class="guide-toggle"><span>📖</span> 顯示說明</button>
+                            <button id="close-admin-btn" class="guide-toggle" style="color: #fca5a5 !important;">✕ 關閉</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Guide (collapsible) -->
+                    <div id="admin-guide" style="display: none; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; padding: 12px; margin-bottom: 12px; font-size: 0.78rem; color: rgba(255,255,255,0.75); line-height: 1.7;">
+                        <div style="font-weight: 700; color: #a78bfa; margin-bottom: 8px;">📖 管理員使用指南</div>
+                        <div>1️⃣ <strong>匯入流程圖</strong>：用 Draw.io 畫好維修流程 → 匯出 XML → 點「匯入」按鈕上傳<br>
+                        2️⃣ <strong>導出備份</strong>：點「導出」可下載目前使用中的 XML，建議定期備份<br>
+                        3️⃣ <strong>修改密碼</strong>：點下方「修改口令」設定新的管理密碼<br>
+                        4️⃣ <strong>開啟方式</strong>：任何頁面按 <code style="background:rgba(255,255,255,0.15); padding:2px 6px; border-radius:4px;">Ctrl + Shift + I</code> 即可開啟此面板<br>
+                        5️⃣ <strong>資料儲存</strong>：流程圖儲存在瀏覽器 LocalStorage，清除瀏覽器資料會遺失</div>
+                    </div>
+
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                        <input type="file" id="xml-upload" accept=".xml" style="display: none;">
+                        <button id="upload-btn" class="btn-secondary"
+                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px;">📥 匯入流程圖</button>
+                        <button id="export-btn" class="btn-secondary"
+                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.08);">📤 導出備份</button>
+                        <button id="edit-sop-admin-btn" class="btn-secondary"
+                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.08);">📝 編輯 SOP</button>
+                        <button id="change-pwd-btn" class="btn-secondary"
+                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.08);">🔑 修改口令</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="card-container">
+            <div id="breadcrumbs" class="breadcrumbs"></div>
+            <div id="tree-node" class="glass-card fade-in">
+                <!-- Content injected by JS -->
+                <div style="text-align: center; color: rgba(255,255,255,0.4); padding: 40px 0;">
+                    <div style="font-size: 4rem; margin-bottom: 10px; opacity: 0.5;">📂</div>
+                    <p style="font-size: 1.1rem; font-weight: 600; color: rgba(255,255,255,0.7);">尚未載入流程資料</p>
+                    <p style="font-size: 0.85em; margin-top: 8px; color: rgba(255,255,255,0.5);">請由上方「⚙️ 管理面板」匯入 .xml 檔案</p>
+                    <div style="margin-top: 20px;">
+                        <span id="replay-user-guide" class="hidden-guide-btn">ⓘ 重新顯示操作提示</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <button id="restart-btn" class="btn-secondary" style="display: none;">🔄 重新開始</button>
+            <button id="back-btn" class="btn-text" style="display: none;">◀ 回上一步</button>
+        </footer>
+    <!-- Step Counter -->
+    <div id="step-counter" class="step-counter" style="display: none;"></div>
+
+    <!-- SOP Floating Action Button -->
+    <button class="sop-fab" id="sop-fab-btn" title="緊急應變 SOP">🚨</button>
+
+    <!-- SOP Overlay -->
+    <div class="sop-overlay" id="sop-overlay"></div>
+
+    <!-- SOP Slide Panel -->
+    <div class="sop-panel" id="sop-panel">
+        <div class="sop-panel-header">
+            <h2>🚨 緊急應變 SOP</h2>
+            <button class="sop-close-btn" id="sop-close-btn">✕</button>
+        </div>
+        <div id="sop-content-container">
+            <!-- Content injected by JS dynamically so it can be edited -->
+        </div>
+    </div>
+
+    <!-- SOP Editor Modal (Admin Only) -->
+    <div class="sop-overlay" id="sop-editor-overlay" style="display: none; z-index: 2000;"></div>
+    <div id="sop-editor-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px; background: var(--bg-gradient); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; z-index: 2001; padding: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); max-height: 90vh; flex-direction: column;">
+        <h3 style="margin-bottom: 16px; font-size: 1.2rem; display: flex; justify-content: space-between;">
+            <span>📝 編輯緊急應變 SOP</span>
+            <button id="close-sop-editor-btn" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; padding: 0;">✕</button>
+        </h3>
+        
+        <div style="flex: 1; overflow-y: auto; padding-right: 8px;">
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.85rem; color: #a78bfa; margin-bottom: 8px; font-weight: 600;">緊急聯絡專線 (第一通報窗口)</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input type="text" id="sop-edit-contact-title" placeholder="例如：營運一課 課長" style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 6px;">
+                    <input type="text" id="sop-edit-contact-phone" placeholder="電話號碼：09..." style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 6px;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.85rem; color: #a78bfa; margin-bottom: 8px; font-weight: 600;">SOP 應變內容 (文字排版)</label>
+                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 8px; line-height: 1.5;">
+                    支援簡易標記：<br>
+                    - 使用 <code>#標題</code> 來定義新的一層階段卡片<br>
+                    - 使用 <code>* 重點</code> 來自動加粗文字
+                </p>
+                <textarea id="sop-edit-content" style="width: 100%; height: 250px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 8px; font-family: inherit; line-height: 1.6; resize: vertical;" placeholder="請在此輸入 SOP 內容..."></textarea>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <button id="reset-sop-btn" class="btn-secondary" style="padding: 8px 16px; font-size: 0.9rem; border: none; opacity: 0.6;">恢復出廠預設</button>
+            <button id="save-sop-btn" class="primary-option" style="padding: 8px 16px; font-size: 0.9rem;">💾 儲存並更新</button>
+        </div>
+    </div>
+
+    <!-- Onboarding Tip -->
+    <div id="onboarding-tip" class="onboarding-tip" style="display: none;">
+        👋 歡迎！請根據機台的異常狀況，<strong>依序點選</strong>選項即可完成排查。<br>
+        右下角 🚨 按鈕可隨時查閱<strong>緊急應變 SOP</strong>。
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
