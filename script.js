@@ -146,6 +146,13 @@ function renderNode(nodeId, direction = 'forward') {
     `;
 
     currentNodeId = nodeId;
+
+    // --- History Support: Push state when navigating ---
+    // Only push if it's a new state (not from popstate or initial load)
+    if (direction === 'forward' || direction === 'restart') {
+        const state = { nodeId: nodeId, historyLength: historyStack.length };
+        history.pushState(state, "", "");
+    }
 }
 
 window.handleOptionClick = function (nextId, isBreadcrumbJump = false) {
@@ -176,6 +183,31 @@ restartBtn.addEventListener('click', () => {
     setTimeout(() => {
         renderNode('start', 'restart');
     }, 250);
+});
+
+// ====== 瀏覽器/手機 返回鍵監聽 (History API) ======
+window.addEventListener('popstate', (e) => {
+    if (e.state && e.state.nodeId) {
+        // 如果有 nodeId，代表是內部的路由狀態
+        const targetId = e.state.nodeId;
+        
+        // 更新歷史堆疊：popstate 時我們需要從 stack 中移除項目
+        // 因為 popstate 是「已經發生」的回退
+        if (historyStack.length > 0) {
+            historyStack.pop();
+        }
+        
+        nodeContainer.className = 'glass-card fade-in';
+        setTimeout(() => {
+            renderNode(targetId, 'back');
+        }, 50);
+    } else {
+        // 如果沒有狀態（例如回到最原始進入頁面時），回到起點
+        if (currentNodeId !== 'start') {
+            nodeContainer.className = 'glass-card fade-in';
+            renderNode('start', 'back');
+        }
+    }
 });
 
 // ====== XML 匯入與解析邏輯 ======
@@ -241,28 +273,42 @@ if (exportBtn) {
     });
 }
 
-// 管理權限組合鍵：Ctrl + Shift + I
-window.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        e.preventDefault();
-        const controls = document.getElementById('admin-controls');
+// 管理權限組合鍵切換為：連點標題 5 次
+const adminTrigger = document.getElementById('admin-trigger');
+let clickCount = 0;
+let clickTimer = null;
+
+if (adminTrigger) {
+    adminTrigger.addEventListener('click', () => {
+        clickCount++;
         
-        // 如果已經開啟，就切換隱藏
-        if (controls && controls.style.display === 'block') {
-            controls.style.display = 'none';
-            return;
-        }
+        if (clickTimer) clearTimeout(clickTimer);
         
-        const pwd = prompt("請輸入管理口令：");
-        if (pwd === getAdminPassword()) {
-            if (controls) {
-                controls.style.display = 'block';
+        clickTimer = setTimeout(() => {
+            clickCount = 0;
+        }, 1000); // 1 秒內沒連點就歸零
+
+        if (clickCount >= 5) {
+            clickCount = 0;
+            const controls = document.getElementById('admin-controls');
+            
+            // 如果已經開啟，就切換隱藏
+            if (controls && controls.style.display === 'block') {
+                controls.style.display = 'none';
+                return;
             }
-        } else if (pwd !== null) {
-            alert("口令錯誤。");
+            
+            const pwd = prompt("請輸入管理口令：");
+            if (pwd === getAdminPassword()) {
+                if (controls) {
+                    controls.style.display = 'block';
+                }
+            } else if (pwd !== null) {
+                alert("口令錯誤。");
+            }
         }
-    }
-});
+    });
+}
 
 // 修改口令功能
 const changePwdBtn = document.getElementById('change-pwd-btn');
