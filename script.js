@@ -652,28 +652,21 @@ if (searchInput && searchResults) {
 
 // 初始化：嘗試載入快取或伺服器 XML
 function init() {
-    const savedXml = localStorage.getItem('faultTreeXml_blank');
-    if (savedXml) {
-        parseDrawioXml(savedXml, true);
-    } else if (typeof xmlData !== 'undefined' && xmlData) {
-        // 使用從 data.js 載入的本地變數
-        parseDrawioXml(xmlData, true, true);
-    } else {
-        // 優先讀取初版 data_test.xml
-        fetch('data_test.xml')
-            .then(res => {
-                if (!res.ok) throw new Error();
-                return res.text();
-            })
-            .then(xml => parseDrawioXml(xml, true, true))
-            .catch(() => {
-                // 備援讀取 data.xml
-                fetch('data.xml')
-                    .then(res => res.text())
-                    .then(xml => parseDrawioXml(xml, true, true))
-                    .catch(() => renderNode('start'));
-            });
-    }
+    // 優先讀取目前的 data.xml，確保是最新的版本
+    fetch('data.xml')
+        .then(res => {
+            if (!res.ok) throw new Error();
+            return res.text();
+        })
+        .then(xml => parseDrawioXml(xml, true, true))
+        .catch(() => {
+            // 如果 data.xml 讀取失敗，嘗試載入本地變數 xmlData (如果存在)
+            if (typeof xmlData !== 'undefined' && xmlData) {
+                parseDrawioXml(xmlData, true, true);
+            } else {
+                renderNode('start');
+            }
+        });
 
     // 首次引導提示
     showOnboardingTip();
