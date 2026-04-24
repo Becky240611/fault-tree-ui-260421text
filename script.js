@@ -7,7 +7,13 @@ let faultTree = {}; // 初始為空
 const ADMIN_PASSWORD_DEFAULT = "data0000";
 
 function getAdminPassword() {
-    return localStorage.getItem('adminPassword') || ADMIN_PASSWORD_DEFAULT;
+    const saved = localStorage.getItem('adminPassword');
+    // 如果快取的是舊的預設口令，則清除它以使用新的預設
+    if (saved === "ecoco888") {
+        localStorage.removeItem('adminPassword');
+        return ADMIN_PASSWORD_DEFAULT;
+    }
+    return saved || ADMIN_PASSWORD_DEFAULT;
 }
 
 let currentXmlData = ""; // 儲存當前 XML 內容用於導出
