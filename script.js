@@ -4,7 +4,7 @@
  */
 
 let faultTree = {}; // 初始為空
-const ADMIN_PASSWORD_DEFAULT = "ecoco888";
+const ADMIN_PASSWORD_DEFAULT = "data0000";
 
 function getAdminPassword() {
     return localStorage.getItem('adminPassword') || ADMIN_PASSWORD_DEFAULT;
