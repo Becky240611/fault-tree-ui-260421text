@@ -6,16 +6,6 @@
 let faultTree = {}; // 初始為空
 const ADMIN_PASSWORD_DEFAULT = "data0000";
 
-function getAdminPassword() {
-    const saved = localStorage.getItem('adminPassword');
-    // 如果快取的是舊的預設口令，則清除它以使用新的預設
-    if (saved === "ecoco888") {
-        localStorage.removeItem('adminPassword');
-        return ADMIN_PASSWORD_DEFAULT;
-    }
-    return saved || ADMIN_PASSWORD_DEFAULT;
-}
-
 let currentXmlData = ""; // 儲存當前 XML 內容用於導出
 
 let historyStack = [];
@@ -322,7 +312,8 @@ if (adminTrigger && adminLoginModal && adminLoginOverlay) {
 
     verifyAdminBtn.addEventListener('click', () => {
         const pwd = adminPwdInput.value;
-        if (pwd === getAdminPassword()) {
+        // 直接使用寫死在程式碼中的口令，徹底避免暫存問題
+        if (pwd === ADMIN_PASSWORD_DEFAULT) {
             const controls = document.getElementById('admin-controls');
             if (controls) controls.style.display = 'block';
             closeLogin();
@@ -339,32 +330,7 @@ if (adminTrigger && adminLoginModal && adminLoginOverlay) {
     });
 }
 
-// 修改口令功能
-const changePwdBtn = document.getElementById('change-pwd-btn');
-if (changePwdBtn) {
-    changePwdBtn.addEventListener('click', () => {
-        const oldPwd = prompt("請輸入目前的管理口令：");
-        if (oldPwd !== getAdminPassword()) {
-            if (oldPwd !== null) alert("口令錯誤，無法修改。");
-            return;
-        }
-        
-        const newPwd = prompt("請輸入新口令（至少 4 個字元）：");
-        if (!newPwd || newPwd.length < 4) {
-            if (newPwd !== null) alert("口令太短，請至少輸入 4 個字元。");
-            return;
-        }
-        
-        const confirmPwd = prompt("請再次輸入新口令以確認：");
-        if (confirmPwd !== newPwd) {
-            if (confirmPwd !== null) alert("兩次輸入不一致，口令未變更。");
-            return;
-        }
-        
-        localStorage.setItem('adminPassword', newPwd);
-        alert("✅ 管理口令已成功更新！");
-    });
-}
+
 
 function parseDrawioXml(xmlString, isInitialLoad = false, isFromServer = false) {
     // XML 防呆與防惡意過濾 (Anti-malice filter)
@@ -602,8 +568,7 @@ function parseDrawioXml(xmlString, isInitialLoad = false, isFromServer = false) 
         historyStack = [];
         buildParents();
         if (!isInitialLoad && !isFromServer) {
-            localStorage.setItem('faultTreeXml_blank', xmlString);
-            alert("成功匯入流程圖！系統已自動記憶。");
+            alert("成功匯入流程圖！");
         }
         renderNode('start', isInitialLoad ? 'init' : 'restart');
     } else {
@@ -656,10 +621,10 @@ if (searchInput && searchResults) {
     };
 }
 
-// 初始化：嘗試載入快取或伺服器 XML
+// 初始化：嘗試載入伺服器 XML
 function init() {
-    // 優先讀取目前的 data.xml，確保是最新的版本
-    fetch('data.xml')
+    // 優先讀取目前的 data.xml，加上時間戳記確保讀取到伺服器最新檔案，徹底避免瀏覽器快取舊資料
+    fetch(`data.xml?t=${new Date().getTime()}`, { cache: "no-store" })
         .then(res => {
             if (!res.ok) throw new Error();
             return res.text();

@@ -8,7 +8,7 @@
     <title>流程圖引導工具</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="hammer.svg">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20260425">
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
@@ -44,9 +44,8 @@
                         <div style="font-weight: 700; color: var(--primary); margin-bottom: 8px;">📖 管理員使用指南</div>
                         <div>1️⃣ <strong>匯入流程圖</strong>：用 Draw.io 畫好維修流程 → 匯出 XML → 點「匯入」按鈕上傳<br>
                         2️⃣ <strong>導出備份</strong>：點「導出」可下載目前使用中的 XML，建議定期備份<br>
-                        3️⃣ <strong>修改密碼</strong>：點下方「修改口令」設定新的管理密碼<br>
-                        4️⃣ <strong>開啟方式</strong>：點擊上方「智能維修助手」標題 **連點 5 次** 即可開啟此面板<br>
-                        5️⃣ <strong>資料儲存</strong>：流程圖儲存在瀏覽器 LocalStorage，清除瀏覽器資料會遺失</div>
+                        3️⃣ <strong>資料儲存</strong>：流程圖儲存在伺服器端，任何更新皆以 data.xml 為準，徹底避免暫存問題<br>
+                        4️⃣ <strong>開啟方式</strong>：點擊上方「智能維修助手」標題 **連點 5 次** 即可開啟此面板</div>
                     </div>
 
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
@@ -57,8 +56,6 @@
                             style="font-size: 0.85em; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">📤 導出備份</button>
                         <button id="edit-sop-admin-btn" class="btn-secondary"
                             style="font-size: 0.85em; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">📝 編輯 SOP</button>
-                        <button id="change-pwd-btn" class="btn-secondary"
-                            style="font-size: 0.85em; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">🔑 修改口令</button>
                     </div>
                 </div>
             </div>
@@ -157,7 +154,7 @@
         右下角 🚨 按鈕可隨時查閱<strong>緊急應變 SOP</strong>。
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=20260425"></script>
 </body>
 
 </html>
