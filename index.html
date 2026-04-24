@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#14b8a6">
     <title>流程圖引導工具</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="hammer.svg">
@@ -19,8 +19,8 @@
     <div class="app-container">
         <header class="app-header">
             <h1 id="admin-trigger" style="display: flex; justify-content: center; align-items: center; gap: 16px; cursor: pointer;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" style="flex-shrink: 0;">
-                    <path fill="#a78bfa" d="m13.78 15.3l6 6l2.11-2.16l-6-6zm3.72-5.2c-.39 0-.81-.05-1.14-.19L4.97 21.25l-2.11-2.11l7.41-7.4L8.5 9.96l-.72.7l-1.45-1.41v2.86l-.7.7l-3.52-3.56l.7-.7h2.81l-1.4-1.41l3.56-3.56a2.976 2.976 0 0 1 4.22 0L9.89 5.74l1.41 1.4l-.71.71l1.79 1.78l1.82-1.88c-.14-.33-.2-.75-.2-1.12a3.49 3.49 0 0 1 3.5-3.52c.59 0 1.11.14 1.58.42L16.41 6.2l1.5 1.5l2.67-2.67c.28.47.42.97.42 1.6c0 1.92-1.55 3.47-3.5 3.47"/>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="48" height="48" style="flex-shrink: 0;">
+                    <path fill="#0ea5e9" d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.8L19.2 8 12 11.2 4.8 8 12 4.8zM4 15.8V9.2L11 12.3v6.6L4 15.8zm9 6.6v-6.6l7-3.1v6.6l-7 3.1z"/>
                 </svg>
                 智能維修助手
             </h1>
@@ -40,8 +40,8 @@
                     </div>
                     
                     <!-- Admin Guide (collapsible) -->
-                    <div id="admin-guide" style="display: none; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; padding: 12px; margin-bottom: 12px; font-size: 0.78rem; color: rgba(255,255,255,0.75); line-height: 1.7;">
-                        <div style="font-weight: 700; color: #a78bfa; margin-bottom: 8px;">📖 管理員使用指南</div>
+                    <div id="admin-guide" style="display: none; background: #0f172a; border: 1px solid var(--primary); border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.78rem; color: rgba(255,255,255,0.75); line-height: 1.7;">
+                        <div style="font-weight: 700; color: var(--primary); margin-bottom: 8px;">📖 管理員使用指南</div>
                         <div>1️⃣ <strong>匯入流程圖</strong>：用 Draw.io 畫好維修流程 → 匯出 XML → 點「匯入」按鈕上傳<br>
                         2️⃣ <strong>導出備份</strong>：點「導出」可下載目前使用中的 XML，建議定期備份<br>
                         3️⃣ <strong>修改密碼</strong>：點下方「修改口令」設定新的管理密碼<br>
@@ -52,13 +52,13 @@
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
                         <input type="file" id="xml-upload" accept=".xml" style="display: none;">
                         <button id="upload-btn" class="btn-secondary"
-                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px;">📥 匯入流程圖</button>
+                            style="font-size: 0.85em; padding: 8px 16px; border-radius: 6px; background: var(--primary); border: none; color: white;">📥 匯入流程圖</button>
                         <button id="export-btn" class="btn-secondary"
-                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.08);">📤 導出備份</button>
+                            style="font-size: 0.85em; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">📤 導出備份</button>
                         <button id="edit-sop-admin-btn" class="btn-secondary"
-                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.08);">📝 編輯 SOP</button>
+                            style="font-size: 0.85em; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">📝 編輯 SOP</button>
                         <button id="change-pwd-btn" class="btn-secondary"
-                            style="font-size: 0.85em; padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.08);">🔑 修改口令</button>
+                            style="font-size: 0.85em; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">🔑 修改口令</button>
                     </div>
                 </div>
             </div>
@@ -113,7 +113,7 @@
         
         <div style="flex: 1; overflow-y: auto; padding-right: 8px;">
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.85rem; color: #a78bfa; margin-bottom: 8px; font-weight: 600;">緊急聯絡專線 (第一通報窗口)</label>
+                <label style="display: block; font-size: 0.85rem; color: var(--primary); margin-bottom: 8px; font-weight: 600;">緊急聯絡專線 (第一通報窗口)</label>
                 <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                     <input type="text" id="sop-edit-contact-title" placeholder="例如：營運一課 課長" style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 6px;">
                     <input type="text" id="sop-edit-contact-phone" placeholder="電話號碼：09..." style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 6px;">
@@ -121,7 +121,7 @@
             </div>
 
             <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.85rem; color: #a78bfa; margin-bottom: 8px; font-weight: 600;">SOP 應變內容 (文字排版)</label>
+                <label style="display: block; font-size: 0.85rem; color: var(--primary); margin-bottom: 8px; font-weight: 600;">SOP 應變內容 (文字排版)</label>
                 <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 8px; line-height: 1.5;">
                     支援簡易標記：<br>
                     - 使用 <code>#標題</code> 來定義新的一層階段卡片<br>
