@@ -1,11 +1,11 @@
 :root {
-    --bg-main: #020617;
-    --card-bg: #0f172a;
-    --card-border: #1e293b;
+    --bg-main: #042f2e;
+    --card-bg: #064e4b;
+    --card-border: #0d9488;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    --primary: #3b82f6;
-    --primary-hover: #2563eb;
+    --primary: #0d9488;
+    --primary-hover: #0f766e;
     --success: #10b981;
     --success-hover: #059669;
     --danger: #ef4444;
@@ -23,8 +23,8 @@ body {
     font-family: 'Inter', 'Noto Sans TC', sans-serif;
     background-color: var(--bg-main);
     background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.2) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(30, 58, 138, 0.15) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(13, 148, 136, 0.2) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(8, 145, 178, 0.15) 0px, transparent 50%);
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
@@ -54,7 +54,7 @@ body {
     font-size: 2.2rem;
     font-weight: 800;
     margin-bottom: 12px;
-    background: linear-gradient(135deg, #93c5fd, #3b82f6);
+    background: linear-gradient(135deg, #a5f3fc, #0d9488);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.02em;
@@ -145,7 +145,7 @@ button.primary-option {
 
 button.primary-option:hover {
     background: var(--primary-hover);
-    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 15px -3px rgba(13, 148, 136, 0.3);
 }
 
 button.success-btn {
@@ -287,8 +287,8 @@ button.danger-btn:hover {
     top: 45px;
     left: 0;
     right: 0;
-    background: #0f172a;
-    border: 1px solid #1e293b;
+    background: #042f2e;
+    border: 1px solid #0d9488;
     border-radius: 8px;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     max-height: 250px;
@@ -303,7 +303,7 @@ button.danger-btn:hover {
     padding: 12px 15px;
     color: #f8fafc;
     cursor: pointer;
-    border-bottom: 1px solid #1e293b;
+    border-bottom: 1px solid #0d9488;
     font-size: 0.9rem;
     line-height: 1.4;
     transition: background 0.2s;
@@ -318,7 +318,7 @@ button.danger-btn:hover {
 }
 
 .search-item strong {
-    color: #60a5fa;
+    color: #5eead4;
     display: block;
     margin-bottom: 4px;
 }
@@ -337,10 +337,10 @@ button.danger-btn:hover {
     color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
     transition: color 0.2s, background 0.2s;
-    background: #1e293b;
+    background: #0d9488;
     padding: 6px 12px;
     border-radius: 4px;
-    border: 1px solid #3b82f6;
+    border: 1px solid #14b8a6;
 }
 
 .breadcrumb-item:hover {
@@ -500,7 +500,7 @@ button.danger-btn:hover {
     width: 90%;
     max-width: 420px;
     height: 100vh;
-    background: #0f172a;
+    background: #064e4b;
     border-left: 1px solid var(--card-border);
     z-index: 1001;
     overflow-y: auto;
